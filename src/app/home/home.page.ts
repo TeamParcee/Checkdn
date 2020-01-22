@@ -86,7 +86,6 @@ export class HomePage implements OnInit {
       async function callback(results, status) {
         if (status == google.maps.places.PlacesServiceStatus.OK) {
           for (var i = 0; i < 5; i++) {
-            console.log(results[i])
             let place: Place = {
               id: results[i].place_id,
               name: results[i].name,
@@ -105,7 +104,6 @@ export class HomePage implements OnInit {
     return new Promise((resolve) => {
       firebase.firestore().doc("places/" + googlePlace.place_id).get().then((placeSnap) => {
         if (placeSnap.exists) {
-          console.log(placeSnap.data())
           return resolve(placeSnap.data().userCount)
         } else {
           return resolve(0)

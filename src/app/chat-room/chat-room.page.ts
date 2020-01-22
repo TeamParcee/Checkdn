@@ -72,7 +72,6 @@ export class ChatRoomPage implements OnInit {
           people.push(person.data())
         })
         this.people = people;
-        console.log(people);
         this.updateRoomCount();
       })
   }
@@ -93,7 +92,6 @@ export class ChatRoomPage implements OnInit {
       obj.update({ id: obj.id })
     })
     this.text = "";
-    window.scrollTo(0,document.querySelector("#c").scrollHeight);
   }
 
   getMessages() {

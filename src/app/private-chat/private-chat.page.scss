@@ -1,0 +1,50 @@
+.chat-list{
+    background: transparent;
+}
+
+.chat-item {
+    // border: 2px solid red;
+    padding: 2px;
+    height: -webkit-fill-available;
+    white-space: pre;
+
+}
+.chat-item span{
+
+
+    padding: 2px 10px;
+    border-radius: 20px;
+}
+
+.sender {
+    background: rgb(91, 228, 91);
+    color: white;
+    max-width: 80%;
+    height: -webkit-fill-available;
+    white-space: normal;
+    margin-left: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+};
+
+.receiver  {
+    background: rgb(226, 226, 226);
+    color: black;
+    max-width: 80%;
+    height: -webkit-fill-available;
+    white-space: normal;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.timestamp{
+    text-align: center;
+    font-size: 11px;
+    color: #666
+
+}
+ion-item {
+    --background: transparent;
+    --inner-padding-top: 2px
+}

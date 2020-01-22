@@ -27,7 +27,7 @@ export class PrivateChatPage implements OnInit {
     await this.getMessages();
     setTimeout(() => {
       this.scrollToBottom()
-    }, 100)
+    }, 500)
   }
 
   async getRecipient() {
@@ -56,7 +56,7 @@ export class PrivateChatPage implements OnInit {
     let uid = localStorage.getItem('uid');
     firebase.firestore().collection("/users/" + uid + "/messagesList/" + this.recipient.uid + "/messages")
     .orderBy("timestamp")
-    .limit(20)
+    // .limit(20)
     .onSnapshot((messagesSnap) => {
       let messages = [];
       messagesSnap.forEach((message) => {

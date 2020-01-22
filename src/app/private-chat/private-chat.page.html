@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons>
@@ -7,12 +7,20 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding #content id="ion-content">
+<ion-content color="light" padding #content id="ion-content">
 
-  <div *ngFor="let message of messages">
-    <span  class="speech-bubble"> {{ message.text }}</span>
-    <p>{{ message.timestamp | date:'short' }}</p>
-  </div>
+  <ion-list class="chat-list" lines="none">
+    <div  class="chat-item" *ngFor="let message of messages; let i = index">
+      <ion-item>
+
+        <span [ngClass]=" ( message.type == 'send') ? 'sender' : 'receiver'">
+          {{ message.text }} 
+        </span>
+      </ion-item>
+      <p *ngIf=" ( messages[(i - 1)]?.timestamp + 100000 < messages[i]?.timestamp) ? true : false" class="timestamp"> {{ message.timestamp | date: 'MM/dd/yyyy, h:mm a'}}</p>
+    </div>
+
+  </ion-list>
 
 </ion-content>
 
