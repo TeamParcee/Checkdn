@@ -25,18 +25,18 @@
 </ion-content>
 
 
-<ion-footer>
-  <ion-toolbar>
+<ion-footer no-border class="ion-padding-top ">
+  <ion-toolbar >
     <ion-buttons slot="start">
       <ion-button>
         <ion-icon slot="icon-only" name="camera"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-textarea [(ngModel)]="text" style="border: 2px solid #f3f3f3; padding: 4px; border-radius: 5px;" rows="1"
+    <ion-textarea [(ngModel)]="text" class="message-box" placeholder="Send Message" rows="1"
       autoGrow="true">
     </ion-textarea>
     <ion-buttons slot="end">
-      <ion-button (click)="sendMessage()">
+      <ion-button [disabled]="!text" (click)="sendMessage()">
         <ion-icon slot="icon-only" name="send"></ion-icon>
       </ion-button>
     </ion-buttons>
