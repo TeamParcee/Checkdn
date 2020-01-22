@@ -1,14 +1,26 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
+    <ion-title>Home</ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="profile">
+        <ion-icon name="contact"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div class="ion-padding">
-    The world is your oyster.
-    <p>If you get lost, the <a target="_blank" rel="noopener" href="https://ionicframework.com/docs/">docs</a> will be your guide.</p>
-  </div>
+
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list>
+    <ion-item *ngFor="let place of places" (click)="selectPlace(place)" detail>
+      <ion-label>
+        <h2>{{ place.name }}</h2>
+        <p> {{ place.userCount }} {{(place.UserCount == 1) ? "person" : "people" }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>

@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="close()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{ user?.fname + " " + user?.lname }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+  <ion-button (click)="privateChat()">
+    <ion-icon name="mail" slot="end"></ion-icon>
+    Send Message
+  </ion-button>
+
+  <ion-list *ngIf="user">
+    <ion-item>
+      <ion-label position="stacked">First Name</ion-label>
+      <ion-input readonly="true" [(ngModel)]="user.fname"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Last Name</ion-label>
+      <ion-input readonly="true" [(ngModel)]="user.lname"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Email</ion-label>
+      <ion-input readonly="true" [(ngModel)]="user.email"></ion-input>
+    </ion-item>
+  </ion-list>
+</ion-content>

@@ -1,5 +1,7 @@
 {
   "name": "Checkdn",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

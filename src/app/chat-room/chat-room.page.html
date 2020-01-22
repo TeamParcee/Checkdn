@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title> {{ place.name }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="people">
+        {{ people?.length }}
+        <ion-icon name="people" slot="end"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>  
+</ion-header>
+
+
+<ion-content #content fullscreen class="bg">
+  <div class="chat-container">
+    <div *ngFor="let message of messages" class="chat-bubble"
+      [ngClass]="(message?.user?.uid == user?.uid) ? 'send' : 'received'">
+      <h6>{{ message.user.fname + " " + message.user.lname }}</h6>
+      <h6 style="white-space: pre-wrap; text-align: left">{{ message.text }}</h6>
+      <p>{{ message.timestamp | date:'short'}}</p>
+    </div>
+  </div>
+</ion-content>
+
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button>
+        <ion-icon slot="icon-only" name="camera"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-textarea [(ngModel)]="text" style="border: 2px solid #f3f3f3; padding: 4px; border-radius: 5px;" rows="1"
+      autoGrow="true">
+    </ion-textarea>
+    <ion-buttons slot="end">
+      <ion-button (click)="sendMessage()">
+        <ion-icon slot="icon-only" name="send"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

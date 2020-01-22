@@ -1,0 +1,15 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Confirm Email</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">Log Out</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+  <h5 style="text-align: center;">You will be logged in once you confirm your email</h5>
+  <p style="text-align: center;">An email was send to {{ email }}</p>
+  <ion-button expand="full" fill="clear" (click)="changeEmail()">Change Email</ion-button>
+</ion-content>

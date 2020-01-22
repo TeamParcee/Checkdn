@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Profile</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+  <div>
+    <span>
+      <img src="../../../assets/profile.png">
+    </span>
+  </div>
+  <ion-list *ngIf="user">
+    <ion-item>
+      <ion-label position="stacked">First Name</ion-label>
+      <ion-input [(ngModel)]="user.fname"></ion-input>
+      <ion-note (click)="saveFname()" *ngIf="user.fname != originalUser.fname" slot="end" color="success">save
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Last Name</ion-label>
+      <ion-input [(ngModel)]="user.lname"></ion-input>
+      <ion-note (click)="saveLname()" *ngIf="user.lname != originalUser.lname" slot="end" color="success">save
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Email</ion-label>
+      <ion-input [(ngModel)]="user.email"></ion-input>
+      <ion-note (click)="saveEmail()" *ngIf="user.email != originalUser.email" slot="end" color="success">save
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Facebook</ion-label>
+      <ion-input [(ngModel)]="user.email"></ion-input>
+      <ion-note (click)="saveEmail()" *ngIf="user.email != originalUser.email" slot="end" color="success">save
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Instragram</ion-label>
+      <ion-input [(ngModel)]="user.email"></ion-input>
+      <ion-note (click)="saveEmail()" *ngIf="user.email != originalUser.email" slot="end" color="success">save
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Snapchat</ion-label>
+      <ion-input [(ngModel)]="user.email"></ion-input>
+      <ion-note (click)="saveEmail()" *ngIf="user.email != originalUser.email" slot="end" color="success">save
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Linkedin</ion-label>
+      <ion-input [(ngModel)]="user.email"></ion-input>
+      <ion-note (click)="saveEmail()" *ngIf="user.email != originalUser.email" slot="end" color="success">save
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Twitter</ion-label>
+      <ion-input [(ngModel)]="user.email"></ion-input>
+      <ion-note (click)="saveEmail()" *ngIf="user.email != originalUser.email" slot="end" color="success">save
+      </ion-note>
+    </ion-item>
+  </ion-list>
+  <ion-button expand="full">Log Out</ion-button>
+  <ion-button color="danger" expand="full">Delete Account</ion-button>
+
+</ion-content>
