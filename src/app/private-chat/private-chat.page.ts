@@ -18,16 +18,18 @@ export class PrivateChatPage implements OnInit {
   recipient;
   text;
   messages;
-
+  lastMessage;
+  disableScroll = true;
   ngOnInit() {
   }
   async ionViewWillEnter() {
     await this.getUser();
     await this.getRecipient();
     await this.getMessages();
+
     setTimeout(() => {
-      this.scrollToBottom()
-    }, 500)
+      this.scrollToBottom();
+    }, 1000);
   }
 
   async getRecipient() {
@@ -55,17 +57,39 @@ export class PrivateChatPage implements OnInit {
   async getMessages() {
     let uid = localStorage.getItem('uid');
     firebase.firestore().collection("/users/" + uid + "/messagesList/" + this.recipient.uid + "/messages")
-    .orderBy("timestamp")
-    // .limit(20)
-    .onSnapshot((messagesSnap) => {
-      let messages = [];
-      messagesSnap.forEach((message) => {
-        messages.push(message.data())
+      .orderBy("timestamp", "desc")
+      .limit(20)
+      .onSnapshot((messagesSnap) => {
+        let messages = [];
+        messagesSnap.forEach((message) => {
+          messages.push(message.data());
+          this.lastMessage = message;
+        })
+        this.messages = messages.reverse();
+        this.scrollToBottom();
+        setTimeout(() => {
+          this.disableScroll = false;
+        }, 2000);
       })
-      this.messages = messages;
-    })
   }
 
+  async getMoreMessages(event) {
+    setTimeout(() => {
+      let uid = localStorage.getItem('uid');
+      firebase.firestore().collection("/users/" + uid + "/messagesList/" + this.recipient.uid + "/messages")
+        .orderBy("timestamp", "desc")
+        .startAfter(this.lastMessage)
+        .limit(10)
+        .onSnapshot((messagesSnap) => {
+          messagesSnap.forEach((message) => {
+            this.messages.unshift(message.data());
+            this.lastMessage = message;
+            event.target.complete();
+          })
+        })
+    }, 1000);
+
+  }
 
   async sendMessage() {
     let messageReceived = {
@@ -97,6 +121,7 @@ export class PrivateChatPage implements OnInit {
 
   scrollToBottom() {
     this.content.scrollToBottom();
+    console.log("bottom")
 
   }
 }

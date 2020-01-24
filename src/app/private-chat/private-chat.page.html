@@ -9,15 +9,24 @@
 
 <ion-content color="light" padding #content id="ion-content">
 
+
+  <ion-infinite-scroll [disabled]="disableScroll" position="top" threshold="0px"
+    (ionInfinite)="getMoreMessages($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Getting Messages...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+
   <ion-list class="chat-list" lines="none">
-    <div  class="chat-item" *ngFor="let message of messages; let i = index">
+    <div class="chat-item" *ngFor="let message of messages; let i = index">
       <ion-item>
 
         <span [ngClass]=" ( message.type == 'send') ? 'sender' : 'receiver'">
-          {{ message.text }} 
+          {{ message.text }}
         </span>
       </ion-item>
-      <p *ngIf=" ( messages[(i - 1)]?.timestamp + 100000 < messages[i]?.timestamp) ? true : false" class="timestamp"> {{ message.timestamp | date: 'MM/dd/yyyy, h:mm a'}}</p>
+      <p *ngIf=" ( messages[(i - 1)]?.timestamp + 100000 < messages[i]?.timestamp) ? true : false" class="timestamp">
+        {{ message.timestamp | date: 'MM/dd/yyyy, h:mm a'}}</p>
     </div>
 
   </ion-list>
@@ -26,14 +35,13 @@
 
 
 <ion-footer no-border class="ion-padding-top ">
-  <ion-toolbar >
+  <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button>
         <ion-icon slot="icon-only" name="camera"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-textarea [(ngModel)]="text" class="message-box" placeholder="Send Message" rows="1"
-      autoGrow="true">
+    <ion-textarea (ionFocus)="scrollToBottom()" [(ngModel)]="text" class="message-box" placeholder="Send Message" rows="1" autoGrow="true">
     </ion-textarea>
     <ion-buttons slot="end">
       <ion-button [disabled]="!text" (click)="sendMessage()">
