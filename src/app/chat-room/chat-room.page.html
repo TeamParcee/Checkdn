@@ -1,20 +1,33 @@
 <ion-header>
-  <ion-toolbar>
+
+  <ion-toolbar color="dark">
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons>
-    <ion-title> {{ place.name }}</ion-title>
+    <ion-title>
+      <h3>{{ place.name }}</h3>
+    </ion-title>
+  </ion-toolbar>
+  <!-- <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      <h3> {{ place.name }} </h3>
+    </ion-title>
     <ion-buttons slot="end">
       <ion-button routerLink="people">
         {{ people?.length }}
         <ion-icon name="people" slot="end"></ion-icon>
       </ion-button>
     </ion-buttons>
-  </ion-toolbar>  
+  </ion-toolbar>   -->
 </ion-header>
 
 
-<ion-content  #content fullscreen class="bg">
+<ion-content color="light" #content fullscreen>
+
+
   <div class="chat-container">
     <div *ngFor="let message of messages" class="chat-bubble"
       [ngClass]="(message?.user?.uid == user?.uid) ? 'send' : 'received'">

@@ -25,3 +25,27 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
+*{
+    font-family: 'Poppins', sans-serif !important;
+}
+h1 {
+    padding-left: 20px;
+    padding-right: 20px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 30px;
+    font-weight: 600;
+}
+
+h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    ;
+}
+
+
+.icon-one {
+    font-size: 25px;
+    margin-top: 0px;
+    float: right;
+}

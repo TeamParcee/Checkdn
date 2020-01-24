@@ -16,7 +16,7 @@
   </div>
   <ion-list *ngIf="user">
     <ion-item>
-      <ion-label position="stacked">First Name</ion-label>
+      <ion-label  position="stacked">First Name</ion-label>
       <ion-input [(ngModel)]="user.fname"></ion-input>
       <ion-note (click)="saveFname()" *ngIf="user.fname != originalUser.fname" slot="end" color="success">save
       </ion-note>

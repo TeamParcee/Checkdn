@@ -25,11 +25,12 @@ export class PrivateChatPage implements OnInit {
   async ionViewWillEnter() {
     await this.getUser();
     await this.getRecipient();
-    await this.getMessages();
+    await this.getMessages().then(() => {
+      setTimeout(() => {
+        this.scrollToBottom()
+      }, 100);
+    })
 
-    setTimeout(() => {
-      this.scrollToBottom();
-    }, 1000);
   }
 
   async getRecipient() {
@@ -55,25 +56,30 @@ export class PrivateChatPage implements OnInit {
   }
 
   async getMessages() {
-    let uid = localStorage.getItem('uid');
-    firebase.firestore().collection("/users/" + uid + "/messagesList/" + this.recipient.uid + "/messages")
-      .orderBy("timestamp", "desc")
-      .limit(20)
-      .onSnapshot((messagesSnap) => {
-        let messages = [];
-        messagesSnap.forEach((message) => {
-          messages.push(message.data());
-          this.lastMessage = message;
+    return new Promise((resolve) => {
+      let uid = localStorage.getItem('uid');
+      firebase.firestore().collection("/users/" + uid + "/messagesList/" + this.recipient.uid + "/messages")
+        .orderBy("timestamp", "desc")
+        .limit(20)
+        .onSnapshot((messagesSnap) => {
+          let messages = [];
+          messagesSnap.forEach((message) => {
+            messages.push(message.data());
+            this.lastMessage = message;
+          })
+          this.messages = messages.reverse();
+
+          setTimeout(() => {
+            this.disableScroll = false;
+          }, 2000);
         })
-        this.messages = messages.reverse();
-        this.scrollToBottom();
-        setTimeout(() => {
-          this.disableScroll = false;
-        }, 2000);
-      })
+      return resolve()
+    })
+
   }
 
   async getMoreMessages(event) {
+    document.getElementById("ion-content").style.height = "50px";
     setTimeout(() => {
       let uid = localStorage.getItem('uid');
       firebase.firestore().collection("/users/" + uid + "/messagesList/" + this.recipient.uid + "/messages")
@@ -81,11 +87,18 @@ export class PrivateChatPage implements OnInit {
         .startAfter(this.lastMessage)
         .limit(10)
         .onSnapshot((messagesSnap) => {
-          messagesSnap.forEach((message) => {
-            this.messages.unshift(message.data());
-            this.lastMessage = message;
-            event.target.complete();
-          })
+          if(messagesSnap.size > 0){
+            this.disableScroll = false;
+            messagesSnap.forEach((message) => {
+              this.messages.unshift(message.data());
+              this.lastMessage = message;
+              event.target.complete();
+            })
+          } else {
+            event.target.complete(0);
+            this.disableScroll = true;
+          }
+   
         })
     }, 1000);
 
