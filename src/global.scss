@@ -25,6 +25,15 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
+.header-title-auth{
+    white-space: nowrap;   
+    margin: 5px auto;
+    color: white;
+    background: #222428;
+  }
+  
+
+  
 img, img:active{
     border: 0;
 }

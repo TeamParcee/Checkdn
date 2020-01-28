@@ -5,8 +5,14 @@ form{
 ion-list{
     border-radius: 20px;
     padding:10px 20px;
+    background: #222428;
 }
 
+ion-item{
+    border-radius: 20px;
+    margin-bottom: 10px;
+   
+}
 .welcome-back-text{
     font-weight: 600;
     margin-top: 70px;
@@ -16,11 +22,8 @@ ion-list{
 }
 
 
-
-.header-title-auth{
-    white-space: nowrap;   
-    margin: 5px auto;
-    color: white;
+body {
     background: #222428;
-  }
-  
+}
+
+

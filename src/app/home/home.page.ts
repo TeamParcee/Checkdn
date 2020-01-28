@@ -23,6 +23,7 @@ export class HomePage implements OnInit {
 
   places: Place[];
   people;
+  geocoder = new google.maps.Geocoder();
   coords: {
     lat: number,
     lng: number,
@@ -55,22 +56,36 @@ export class HomePage implements OnInit {
   }
 
   getUserLocation() {
-    this.helper.showLoading();
     let that = this;
-    this.geolocation.getCurrentPosition({enableHighAccuracy: true}).then((position) => {
+    this.geolocation.getCurrentPosition({ enableHighAccuracy: true }).then((position) => {
       that.coords = {
         lat: position.coords.latitude,
         lng: position.coords.longitude,
       }
-      that.getPlaces().then(() => {
-        that.helper.hideLoading();
-      })
+      this.getAddress();
     })
   }
 
-  getPlaces() {
-    this.places = [];
+  getAddress() {
+    let currentLocation = new google.maps.LatLng(this.coords.lat, this.coords.lng);
+    let map = new google.maps.Map(document.getElementById('map'), {
+      center: currentLocation,
+      zoom: 15
+    });
+    let latlng = { lat: this.coords.lat, lng: this.coords.lng };
+    this.geocoder.geocode({ "location": latlng }, (results: any, status) => {
+
+      for (let index = 0; index < 3; index++) {
+        const result = results[index];
+        this.getPlace(result.place_id)
+
+      }
+    })
+  }
+
+  getPlace(placeID) {
     return new Promise((resolve) => {
+      this.places = [];
       let currentLocation = new google.maps.LatLng(this.coords.lat, this.coords.lng);
       let map = new google.maps.Map(document.getElementById('map'), {
         center: currentLocation,
@@ -78,38 +93,30 @@ export class HomePage implements OnInit {
       });
 
       var request = {
-        location: currentLocation,
-        rankBy: google.maps.places.RankBy.DISTANCE,
-        type: "establishment",
+        placeId: placeID,
+        fields: ['name'],
       };
 
       let service = new google.maps.places.PlacesService(map);
-      service.nearbySearch(request, callback);
-
-      let that = this;
-      async function callback(results: [], status) {
-        if (status == google.maps.places.PlacesServiceStatus.OK) {
-          let places = [];
-          results.forEach(async (place: any) => {
-            let p: Place = {
-              id: place.place_id,
-              name: place.name,
-              userCount: await that.getUserCount(place),
-            }
-            that.places.push(p)
-          })
-          return resolve();
+      service.getDetails(request, async (place, status) => {
+        let p: Place = {
+          id: placeID,
+          name: place.name,
+          userCount: await this.getUserCount(placeID),
         }
-      }
+        console.log(p);
+        this.places.push(p)
+      })
+
     })
   }
 
-  getUserCount(googlePlace): Promise<number> {
+  getUserCount(placeID): Promise<number> {
     return new Promise((resolve) => {
-      firebase.firestore().doc("places/" + googlePlace.place_id).get().then((placeSnap) => {
+      firebase.firestore().doc("places/" + placeID).get().then((placeSnap) => {
         if (placeSnap.exists) {
           firebase.firestore().collection("/users/")
-            .where("place", "==", googlePlace.place_id).get().then((usersSnap) => {
+            .where("place", "==", placeID).get().then((usersSnap) => {
               this.people = usersSnap.size;
               return resolve(usersSnap.size)
             })

@@ -1,46 +1,49 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/login"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Checkdn</ion-title>
-  </ion-toolbar>
+<ion-header color="dark">
+  <ion-toolbar color="dark" no-border></ion-toolbar>
+
+
+  <span class="ion-text-center">
+    <h1 class="header-title-auth">Checkdn</h1>
+  </span>
 </ion-header>
 
-<ion-content class="ion-padding">
 
-  <h3>Create  an Account</h3>
-  <form #registerForm="ngForm">
-    <ion-list lines="none" style="background: #ffffff;">
+<ion-content color="dark" class="ion-padding">
+
+  <h3 class="create-account-text">Create an Account</h3>
+  <form  class="login-form"  #registerForm="ngForm">
+    <ion-list lines="none" >
       <ion-item>
-        <ion-label>First Name</ion-label>
-        <ion-input #fname="ngModel" name="fname"  ngModel minlength="2" required></ion-input>
+        <ion-label position="stacked" class="auth-label">First Name</ion-label>
+        <ion-input #fname="ngModel" name="fname" ngModel minlength="2" required></ion-input>
       </ion-item>
-      <p style="color: red" class="ion-text-center" color="danger" *ngIf="fname.invalid && (fname.touched || fname.dirty) ">Your First
+      <p style="color: red" class="ion-text-center" color="danger"
+        *ngIf="fname.invalid && (fname.touched || fname.dirty) ">Your First
         Name is required</p>
 
       <ion-item>
-        <ion-label>Last Name</ion-label>
+        <ion-label position="stacked" class="auth-label">Last Name</ion-label>
         <ion-input #lname="ngModel" name="lname" ngModel required minlength="2" type="text"></ion-input>
       </ion-item>
       <p style="color: red" class="ion-text-center" color="danger" *ngIf="lname.invalid && lname.touched">Your Last Name
         is required</p>
 
       <ion-item>
-        <ion-label>Email</ion-label>
+        <ion-label position="stacked" class="auth-label">Email</ion-label>
         <ion-input #email="ngModel" ngModel name="email" required email type="email"></ion-input>
       </ion-item>
       <p style="color: red" class="ion-text-center" color="danger" *ngIf="email.invalid && email.touched">Email Address
         is not formatted correctly</p>
 
       <ion-item>
-        <ion-label  >Password</ion-label >
+        <ion-label position="stacked" class="auth-label">Password</ion-label>
         <ion-input #password="ngModel" name="password" minlength="6" required ngModel type="password"></ion-input>
       </ion-item>
       <p style="color: red" class="ion-text-center" color="danger" *ngIf="password.invalid && password.touched">Your
         password must be at least 6 charaters long</p>
 
     </ion-list>
-    <ion-button [disabled]="registerForm.invalid" (click)="register(registerForm)" expand="block">Register</ion-button>
+    <ion-button color="light" [disabled]="registerForm.invalid" (click)="register(registerForm)" expand="block">Register</ion-button>
+    <ion-button color="dark"routerLink="/login" routerDirection="back" expand="block">Already have an account</ion-button>
   </form>
 </ion-content>

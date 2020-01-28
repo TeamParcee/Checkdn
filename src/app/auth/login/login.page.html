@@ -1,4 +1,4 @@
-<ion-header color="dark">
+<ion-header>
   <ion-toolbar color="dark" no-border></ion-toolbar>
   <span class="ion-text-center">
     <h1 class="header-title-auth">Checkdn</h1>
@@ -10,11 +10,11 @@
   <form class="login-form" [formGroup]="loginForm" (ngSubmit)="login()">
     <ion-list style="margin-bottom: 0px;" lines="none">
       <ion-item>
-        <ion-label class="auth-label">Email</ion-label>
+        <ion-label position="stacked" class="auth-label">Email</ion-label>
         <ion-input formControlName="email" type="email"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label class="auth-label">Password</ion-label>
+        <ion-label position="stacked" class="auth-label">Password</ion-label>
         <ion-input formControlName="password" type="password"></ion-input>
       </ion-item>
     </ion-list>
@@ -23,5 +23,5 @@
   <p style="display: block;" (click)="passwordReset()" class="ion-text-right" fill="clear">Forgot your password?</p>
   <ion-button color="light" [disabled]="loginForm.invalid" type="submit" expand="block" (click)="login()">Login
   </ion-button>
-  <ion-button color="light" fill="clear" expand="block" routerLink="/register">Create an Account</ion-button>
+  <ion-button color="dark"  expand="block" routerLink="/register">Create an Account</ion-button>
 </ion-content>

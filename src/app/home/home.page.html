@@ -29,7 +29,7 @@
         <div class="place-name">{{ (place?.name.length < 21) ?  place?.name : place?.name.slice(0, 20) + "..."}}
           <span (click)="selectPlace(place)" class="checkin-btn">Check in</span>
         </div>
-        <div class="place-count"> {{ people }} {{(people == 1) ? "person" : "people" }}</div>
+        <div style="font-weight: 300;" class="place-count"> {{ people }} {{(people == 1) ? "person" : "people" }}</div>
       </ion-col>
     </ion-row>
   </div>
