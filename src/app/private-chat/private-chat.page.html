@@ -1,10 +1,27 @@
-<ion-header>
+<!-- <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons>
     <ion-title>{{recipient?.fname + " " + recipient?.lname }}</ion-title>
   </ion-toolbar>
+</ion-header> -->
+
+<ion-header>
+  <ion-toolbar></ion-toolbar>
+  <div class="top-header">
+    <div *ngIf="recipient">
+      <img [routerLink]="['/chat-room/people/view-profile/', recipient?.uid]" routerDirection="back" class="back-btn"
+        src="https://img.icons8.com/android/30/000000/back.png">
+    </div>
+
+    <span class="ion-text-center">
+      <div class="user-container">
+        <img class="recipient-photo" [src]="recipient?.photo">
+        <h1 class="header-title">{{recipient?.fname + " " + recipient?.lname }}</h1>
+      </div>
+    </span>
+  </div>
 </ion-header>
 
 <ion-content color="light" padding #content id="ion-content">
@@ -41,7 +58,8 @@
         <ion-icon slot="icon-only" name="camera"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-textarea (ionFocus)="scrollToBottom()" [(ngModel)]="text" class="message-box" placeholder="Send Message" rows="1" autoGrow="true">
+    <ion-textarea (ionFocus)="scrollToBottom()" [(ngModel)]="text" class="message-box" placeholder="Send Message"
+      rows="1" autoGrow="true">
     </ion-textarea>
     <ion-buttons slot="end">
       <ion-button [disabled]="!text" (click)="sendMessage()">

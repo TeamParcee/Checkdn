@@ -4,6 +4,7 @@ import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 import { HelperService } from '../shared/helper.service';
 import { Router } from '@angular/router';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 declare var google;
 @Component({
@@ -17,9 +18,11 @@ export class HomePage implements OnInit {
     private placeService: PlaceService,
     private helper: HelperService,
     private routerLink: Router,
+    private geolocation: Geolocation
   ) { }
 
   places: Place[];
+  people;
   coords: {
     lat: number,
     lng: number,
@@ -37,6 +40,7 @@ export class HomePage implements OnInit {
         this.helper.okAlert("No Location", "We are not able to find any places near you")
       }
     }, 10000);
+
   }
 
   doRefresh(event) {
@@ -53,7 +57,7 @@ export class HomePage implements OnInit {
   getUserLocation() {
     this.helper.showLoading();
     let that = this;
-    navigator.geolocation.getCurrentPosition(function (position) {
+    this.geolocation.getCurrentPosition({enableHighAccuracy: true}).then((position) => {
       that.coords = {
         lat: position.coords.latitude,
         lng: position.coords.longitude,
@@ -61,12 +65,12 @@ export class HomePage implements OnInit {
       that.getPlaces().then(() => {
         that.helper.hideLoading();
       })
-    }, function (error) { that.helper.okAlert("Error", error.message) }, { enableHighAccuracy: true })
+    })
   }
 
   getPlaces() {
+    this.places = [];
     return new Promise((resolve) => {
-      this.places = [];
       let currentLocation = new google.maps.LatLng(this.coords.lat, this.coords.lng);
       let map = new google.maps.Map(document.getElementById('map'), {
         center: currentLocation,
@@ -83,28 +87,32 @@ export class HomePage implements OnInit {
       service.nearbySearch(request, callback);
 
       let that = this;
-      async function callback(results, status) {
+      async function callback(results: [], status) {
         if (status == google.maps.places.PlacesServiceStatus.OK) {
-          for (var i = 0; i < 5; i++) {
-            let place: Place = {
-              id: results[i].place_id,
-              name: results[i].name,
-              userCount: await that.getUserCount(results[i]),
-            };
-            that.places.push(place);
-            return resolve();
-          }
+          let places = [];
+          results.forEach(async (place: any) => {
+            let p: Place = {
+              id: place.place_id,
+              name: place.name,
+              userCount: await that.getUserCount(place),
+            }
+            that.places.push(p)
+          })
+          return resolve();
         }
       }
     })
-
   }
 
   getUserCount(googlePlace): Promise<number> {
     return new Promise((resolve) => {
       firebase.firestore().doc("places/" + googlePlace.place_id).get().then((placeSnap) => {
         if (placeSnap.exists) {
-          return resolve(placeSnap.data().userCount)
+          firebase.firestore().collection("/users/")
+            .where("place", "==", googlePlace.place_id).get().then((usersSnap) => {
+              this.people = usersSnap.size;
+              return resolve(usersSnap.size)
+            })
         } else {
           return resolve(0)
         }
@@ -113,8 +121,17 @@ export class HomePage implements OnInit {
   }
 
   selectPlace(place) {
-    this.placeService.place = place;
-    this.routerLink.navigateByUrl("/chat-room/" + place.id)
+    let uid = localStorage.getItem('uid');
+    console.log(place.name, place.id);
+    firebase.firestore().doc("/users/" + uid).update({ place: place.id })
+    firebase.firestore().doc("/places/" + place.id).get().then((placeSnap) => {
+      if (placeSnap.exists) {
+        this.routerLink.navigateByUrl("/chat-room")
+      } else {
+        firebase.firestore().doc("/places/" + place.id).set({ ...place })
+        this.routerLink.navigateByUrl("/chat-room")
+      }
+    })
   }
 }
 

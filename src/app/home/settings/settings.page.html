@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar no-border></ion-toolbar>
+  <span class="ion-text-center">
+    <h1 class="header-title">Settings</h1>
+  </span>
+  <div routerLink="/home">
+    <img class="icon-header-right" src="https://img.icons8.com/android/30/000000/forward.png">
+  </div>
+
+</ion-header>
+
+<ion-content>
+  <div class="settings-header">Personal Information</div>
+  <ion-list class="settings-list" *ngIf="user && originalUser">
+    <ion-item>
+      <ion-label class="settings-label" position="stacked">First Name </ion-label>
+      <ion-input [(ngModel)]="user.fname" placeholder="Jane" class="settings-input"> </ion-input>
+      <span (click)="saveFname()" *ngIf="user?.fname != originalUser?.fname" class="save-btn">save</span>
+    </ion-item>
+    <ion-item>
+      <ion-label class="settings-label" position="stacked">Last Name </ion-label>
+      <ion-input [(ngModel)]="user.lname" placeholder="Doe" class="settings-input"> </ion-input>
+      <span (click)="saveLname()" *ngIf="user?.lname != originalUser?.lname" class="save-btn">save</span>
+    </ion-item>
+    <ion-item>
+      <ion-label class="settings-label" position="stacked">Email </ion-label>
+      <ion-input [(ngModel)]="user.email" placeholder="Jane" class="settings-input"> </ion-input>
+      <span (click)="saveEmail()" *ngIf="user?.email != originalUser?.email" class="save-btn">save</span>
+    </ion-item>
+    <ion-item (click)="logout()"  lines="none">
+      <ion-icon slot="start" name="log-out"></ion-icon>
+      <ion-label class="settings-label"> Log Out</ion-label>
+    </ion-item>
+    <ion-item (click)="delete()"  lines="none">
+      <ion-icon color="danger" slot="start" name="trash"></ion-icon>
+      <ion-label color="danger" class="settings-label"> Delete Account</ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

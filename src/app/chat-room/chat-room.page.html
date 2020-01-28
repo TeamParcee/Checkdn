@@ -1,14 +1,4 @@
-<ion-header>
-
-  <ion-toolbar color="dark">
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/home"></ion-back-button>
-    </ion-buttons>
-    <ion-title>
-      <h3>{{ place.name }}</h3>
-    </ion-title>
-  </ion-toolbar>
-  <!-- <ion-toolbar color="dark">
+<!-- <ion-toolbar color="dark">
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons>
@@ -22,18 +12,49 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>   -->
+
+
+<ion-header>
+  <ion-toolbar></ion-toolbar>
+  <div class="top-header">
+    <div>
+      <img (click)="navigateBack()" class="back-btn" src="https://img.icons8.com/android/30/000000/back.png">
+    </div>
+
+
+    <span class="ion-text-center">
+      <h1 class="header-title">{{ (place?.name.length < 10) ?  place?.name : place?.name.slice(0, 9) + "..."}}</h1>
+    </span>
+
+    <div routerLink="people">
+      <span class="people-count" *ngIf="people"> {{ people.length }}</span>
+      <img class="icon-header-right" src="https://img.icons8.com/ios/30/000000/conference-call.png">
+    </div>
+  </div>
 </ion-header>
+<ion-content #content color="light">
 
 
-<ion-content color="light" #content fullscreen>
+
+  <div style="clear: both;"></div>
 
 
   <div class="chat-container">
-    <div *ngFor="let message of messages" class="chat-bubble"
-      [ngClass]="(message?.user?.uid == user?.uid) ? 'send' : 'received'">
-      <h6>{{ message.user.fname + " " + message.user.lname }}</h6>
-      <h6 style="white-space: pre-wrap; text-align: left">{{ message.text }}</h6>
-      <p>{{ message.timestamp | date:'short'}}</p>
+    <div class="message-container" *ngFor="let message of messages">
+      <div class="message">
+        <div class="message-user-timestamp">
+          <span class="message-user-photo">
+            <img class="avatar" [src]="message.user.photo">
+          </span>
+          <span>
+            <span class="message-user">{{ message.user.fname + " " + message.user.lname }} </span>
+            <span class="message-timestamp">
+              {{ (getFormatDate(message.timestamp) == "short") ? (message.timestamp | date: 'h:mm a')  :  (message.timestamp | date: 'MMM dd, h:mm a') }}
+            </span>
+          </span>
+        </div>
+        <span class="message-text">{{ message.text }}</span>
+      </div>
     </div>
   </div>
 </ion-content>
@@ -41,16 +62,10 @@
 
 <ion-footer>
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button>
-        <ion-icon slot="icon-only" name="camera"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    <ion-textarea [(ngModel)]="text" style="border: 2px solid #f3f3f3; padding: 4px; border-radius: 5px;" rows="1"
-      autoGrow="true">
+    <ion-textarea class="chat-text-input" [(ngModel)]="text" rows="1" autoGrow="true">
     </ion-textarea>
     <ion-buttons slot="end">
-      <ion-button (click)="sendMessage()">
+      <ion-button [disabled]="!text" (click)="sendMessage()">
         <ion-icon slot="icon-only" name="send"></ion-icon>
       </ion-button>
     </ion-buttons>

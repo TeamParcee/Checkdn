@@ -13,6 +13,10 @@ import * as firebase from 'firebase/app';
 import { ViewProfilePage } from './view-profile/view-profile.page';
 import { FormsModule } from '@angular/forms';
 import { Device } from '@ionic-native/device/ngx';
+import { CropImagePage } from './home/profile/crop-image/crop-image.page';
+import { ImageCropperModule } from 'ngx-image-cropper';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+
 
 
 // Your web app's Firebase configuration
@@ -30,18 +34,21 @@ firebase.initializeApp(firebaseConfig);
 @NgModule({
   declarations: [
     AppComponent,
-    ViewProfilePage],
+    CropImagePage,
+    ],
   entryComponents: [
-    ViewProfilePage,
+    CropImagePage,
   ],
   imports: [BrowserModule,
     IonicModule.forRoot(),
+    ImageCropperModule,
     FormsModule,
     AppRoutingModule],
   providers: [
     StatusBar,
     Device,
     PlaceService,
+    Geolocation,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],

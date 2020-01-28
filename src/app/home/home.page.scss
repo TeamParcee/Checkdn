@@ -1,3 +1,37 @@
 .place-label{
     white-space: normal;
 }
+
+
+.places-container{
+    margin: 50px 20px
+}
+
+
+.checkin-btn{
+    float: right;
+    font-size: 16px;
+    border: 2px solid black;
+    padding: 5px;
+    border-radius: 10px;
+}
+.checkin-btn:active{
+    background: black;
+    color: white;
+}
+.place-name{
+    font-size: 20px
+}
+.place-count{
+    font-size: 20px;
+    font-weight: 300;
+}
+
+
+.icon-header-settings{
+    border: 0px;
+    position: absolute;
+    bottom: 8px;
+    left: 20px;
+    font-size: 32px;
+}

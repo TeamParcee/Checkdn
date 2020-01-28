@@ -1,33 +1,48 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button (click)="close()">
-        <ion-icon slot="icon-only" name="close"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    <ion-title>{{ user?.fname + " " + user?.lname }}</ion-title>
-  </ion-toolbar>
+  <ion-toolbar></ion-toolbar>
+  <div class="top-header">
+    <div>
+      <img routerLink="/chat-room/people" routerDirection="back" class="back-btn"
+        src="https://img.icons8.com/android/30/000000/back.png">
+    </div>
+
+    <span class="ion-text-center">
+      <h1 class="header-title">View Profile</h1>
+    </span>
+  </div>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
+  <div *ngIf="user" class="profile-image-container">
+    <span class="image-container">
+      <img class="profile-image" [src]="(user?.photo) ? user?.photo : '../../../assets/profile.png'">
+    </span>
+  </div>
 
-  <ion-button (click)="privateChat()">
-    <ion-icon name="mail" slot="end"></ion-icon>
-    Send Message
-  </ion-button>
+  <div class="user-name-label">{{ user?.fname + ' ' + user?.lname }} </div>
 
+  <div style="text-align: center;">
+    <ion-button  (click)="privateChat()">
+      <ion-icon name="mail" slot="end"></ion-icon>
+       Message
+    </ion-button>
+  </div>
+
+
+  <div class="social-media-header">Social Media</div>
   <ion-list *ngIf="user">
     <ion-item>
-      <ion-label position="stacked">First Name</ion-label>
-      <ion-input readonly="true" [(ngModel)]="user.fname"></ion-input>
+      <ion-label (click)="testFacebook()" class="social-media-label" position="stacked">Facebook </ion-label>
+      <ion-input readonly [(ngModel)]="user.facebook" placeholder="https://www.facebook.com/john.smith"
+        class="social-media-input"> </ion-input>
     </ion-item>
     <ion-item>
-      <ion-label position="stacked">Last Name</ion-label>
-      <ion-input readonly="true" [(ngModel)]="user.lname"></ion-input>
+      <ion-label class="social-media-label" position="stacked">LinkedIn
+      </ion-label>
+      <ion-input readonly [(ngModel)]="user.linkedin" placeholder="https://www.linkedin.com/in/john" class="social-media-input">
+      </ion-input>
     </ion-item>
-    <ion-item>
-      <ion-label position="stacked">Email</ion-label>
-      <ion-input readonly="true" [(ngModel)]="user.email"></ion-input>
-    </ion-item>
+
   </ion-list>
+
 </ion-content>

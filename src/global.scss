@@ -25,6 +25,9 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
+img, img:active{
+    border: 0;
+}
 *{
     font-family: 'Poppins', sans-serif !important;
 }
@@ -35,7 +38,13 @@ h1 {
     font-size: 30px;
     font-weight: 600;
 }
-
+h2 {
+    padding-left: 20px;
+    padding-right: 20px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+}
 h3 {
     font-family: 'Poppins', sans-serif;
     font-size: 15px;
@@ -49,3 +58,52 @@ h3 {
     margin-top: 0px;
     float: right;
 }
+
+.icon-header-right{
+
+    border: 0px;
+    position: absolute;
+    bottom: 8px;
+    right: 20px
+}
+
+.icon-header-left{
+    border: 0px;
+    position: absolute;
+    bottom: 8px;
+    left: 20px
+}
+
+.back-btn{
+    border: 0px;
+    position: absolute;
+    bottom: 8px;
+    left: 10px
+}
+
+
+.top-header{
+    position: relative;
+    height: 40px;
+}
+
+
+.header-title{
+    white-space: nowrap;   
+    margin: 5px auto;
+}
+
+.auth-label{
+    font-weight: 300;
+    font-size: 20px;
+    float: left;
+}
+ion-header{
+background:white;
+
+}
+
+* {
+    scroll-behavior: smooth;
+  }
+

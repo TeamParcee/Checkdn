@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: ProfilePage
+  },
+  {
+    path: 'crop-image',
+    loadChildren: () => import('./crop-image/crop-image.module').then( m => m.CropImagePageModule)
   }
 ];
 

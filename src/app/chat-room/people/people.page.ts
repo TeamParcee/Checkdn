@@ -19,8 +19,9 @@ export class PeoplePage implements OnInit {
     private helper: HelperService,
   ) { }
 
-  place = this.placeService.place;
+  place;
   people;
+  filterPeople: any[];
 
   ngOnInit() {
   }
@@ -28,19 +29,20 @@ export class PeoplePage implements OnInit {
   ionViewWillEnter() {
     this.getPeople();
   }
-  getPeople() {
-    if (!this.place) {
-      this.navCtrl.navigateRoot("/home");
-      return; 
-    }
+  async getPeople() {
+    let uid = localStorage.getItem('uid');
+    let userSnap = await firebase.firestore().doc("/users/" + uid).get()
+    let user = userSnap.data();
+
     firebase.firestore().collection("/users/")
-      .where("place", "==", this.place.id)
+      .where("place", "==", user.place)
       .onSnapshot((peopleSnap) => {
         let people = [];
         peopleSnap.forEach((person) => {
           people.push(person.data())
         })
         this.people = people;
+        this.filterPeople = people;
       })
   }
 
@@ -54,5 +56,25 @@ export class PeoplePage implements OnInit {
 
   viewProfile(person) {
     this.helper.openModal(ViewProfilePage, { user: person })
+  }
+
+  navigateBack() {
+    this.navCtrl.navigateBack("/chat-room")
+  }
+
+  search(event) {
+    let text = event.target.value.toLowerCase();
+    this.filterPeople = [];
+    if (!text) {
+      this.filterPeople = [...this.people];
+      return;
+    }
+    this.people.forEach((person) => {
+      let fullNmae = person.fname + " " + person.lname;
+      let shouldShow = person.fname.toLowerCase().indexOf(text) > -1 || person.lname.toLowerCase().indexOf(text) > -1 || fullNmae.toLowerCase().indexOf(text) > -1
+      if (shouldShow) {
+        this.filterPeople.push(person)
+      }
+    })
   }
 }

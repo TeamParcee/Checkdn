@@ -45,8 +45,8 @@ export class HelperService {
         componentProps: componentProps
       }).then((modal) => {
         modal.present()
-        modal.onDidDismiss().then(() => {
-        return resolve();
+        modal.onDidDismiss().then((result) => {
+        return resolve(result.data);
         })
       })
     })

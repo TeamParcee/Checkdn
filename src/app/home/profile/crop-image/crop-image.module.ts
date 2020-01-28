@@ -4,19 +4,19 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ProfilePageRoutingModule } from './profile-routing.module';
+import { CropImagePageRoutingModule } from './crop-image-routing.module';
 
-import { ProfilePage } from './profile.page';
+import { CropImagePage } from './crop-image.page';
 import { ImageCropperModule } from 'ngx-image-cropper';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    IonicModule,
     ImageCropperModule,
-    ProfilePageRoutingModule
+    IonicModule,
+    CropImagePageRoutingModule
   ],
-  declarations: [ProfilePage]
+  declarations: [CropImagePage]
 })
-export class ProfilePageModule {}
+export class CropImagePageModule {}

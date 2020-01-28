@@ -1,21 +1,38 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/home"></ion-back-button>
-    </ion-buttons>
-    <ion-title>People</ion-title>
-  </ion-toolbar>
+  <ion-toolbar></ion-toolbar>
+  <div class="top-header">
+    <div>
+      <img (click)="navigateBack()" class="back-btn" src="https://img.icons8.com/android/30/000000/back.png">
+    </div>
+
+    <span class="ion-text-center">
+      <h1 class="header-title">People</h1>
+    </span>
+  </div>
 </ion-header>
 
-<ion-content>
-  <ion-list>
-    <ion-item *ngFor="let person of people" (click)="viewProfile(person)" detail>
-      <ion-avatar slot="start">
-        <img src="">
-      </ion-avatar>
-      <ion-label>
-        {{ person.fname + " " + person.lname}}
-      </ion-label>
-    </ion-item>
-  </ion-list>
+<ion-content color="light">
+
+  <div class="search-container">
+    <ion-searchbar (ionChange)="search($event)"></ion-searchbar>
+  </div>
+
+  <ion-grid>
+    <ion-row>
+
+      <ion-col size="3" *ngFor="let person of filterPeople">
+        <ion-card [routerLink]="['view-profile',person.uid]" style="background: white;" class="ion-no-margin">
+          <ion-card-header class="ion-no-padding">
+            <ion-card-content>
+              <img class="person-photo" [src]="person.photo">
+            </ion-card-content>
+            <ion-card-subtitle class="ion-text-center"> {{person.fname + ' ' + person.lname }} </ion-card-subtitle>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
+
+
 </ion-content>

@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="close()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Image Cropper</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content color="light" padding *ngIf="dataUrl">
+
+  <div class="image-container">
+    <div class="image-label"> Image </div>
+    <ion-text *ngIf="failedLoad" (color)="danger">Image failed to loadd</ion-text>
+    <image-cropper [imageFile]="dataUrl" [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
+      [aspectRatio]="1 / 1" [resizeToWidth]="150" [resizeToHeight]="150" cropperMinWidth="150" cropperMinHeight="150"
+      format="png" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()" (cropperReady)="cropperReady()"
+      (loadImageFailed)="loadImageFailed()"></image-cropper>
+  </div>
+
+  <div class="image-preview-container">
+    <div class="image-preview-label">Preview</div>
+    <img [src]="croppedImage" />
+  </div>
+
+
+  <ion-button (click)="save()" fill="clear" expand="full">Save</ion-button>
+</ion-content>

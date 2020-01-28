@@ -1,31 +1,39 @@
+<ion-header>
+  <ion-toolbar no-border></ion-toolbar>
+  <div class="top-header">
+    <div routerLink="/home/settings" routerDirection="back">
+      <img class="icon-header-settings" src="https://img.icons8.com/cotton/32/000000/settings.png"> </div>
+    <span class="ion-text-center">
+      <h1 class="header-title">Home</h1>
+    </span>
+    <div routerLink="/home/profile">
+      <img class="icon-header-right" src="https://img.icons8.com/ios/30/000000/user.png">
+    </div>
+  </div>
+
+</ion-header>
+
 <ion-content class="ion-padding-none">
 
-  <div routerLink="/home/profile">
-    <img style="float: right;margin:19px;" src="https://img.icons8.com/ios/30/000000/user.png">
-  </div>
-  <h1>Home</h1>
-  <div style="float: clear"></div>
+
+  <div style="clear:both"></div>
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
 
 
-  <ion-row *ngFor="let place of places" (click)="selectPlace(place)">
-    <ion-col size="12">
-      <ion-item lines="none" color="medium" class="div-name">
-        <ion-avatar slot="start">
-          <img src="https://img.icons8.com/clouds/100/000000/work.png" />
-        </ion-avatar>
-        <ion-label class="place-label">{{ place.name }}
-          <p> {{ place.userCount }} {{(place.UserCount == 1) ? "person" : "people" }}</p>
-        </ion-label>
-        <ion-label>
-          <ion-icon name="pin" class="icon-one"></ion-icon>
-        </ion-label>
-      </ion-item>
-    </ion-col>
-  </ion-row>
+  <div class="places-container">
+    <ion-row *ngFor="let place of places">
+      <ion-col size="12">
+        <div class="place-name">{{ (place?.name.length < 21) ?  place?.name : place?.name.slice(0, 20) + "..."}}
+          <span (click)="selectPlace(place)" class="checkin-btn">Check in</span>
+        </div>
+        <div class="place-count"> {{ people }} {{(people == 1) ? "person" : "people" }}</div>
+      </ion-col>
+    </ion-row>
+  </div>
+
 
 
 </ion-content>

@@ -23,6 +23,12 @@ export class ViewProfilePage implements OnInit {
   }
 
   ionViewWillEnter() {
+    this.route.paramMap.subscribe((paramMap) => {
+      let uid = paramMap.get('id');
+      firebase.firestore().doc("/users/" + uid).get().then((userSnap) => {
+        this.user = userSnap.data();
+      })
+    })
   }
 
   close() {

@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { PlaceService, Place } from '../home/place.service';
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
-import { IonContent } from '@ionic/angular';
+import { IonContent, NavController } from '@ionic/angular';
 import { HelperService } from '../shared/helper.service';
 import { ViewProfilePage } from '../view-profile/view-profile.page';
 
@@ -18,45 +18,47 @@ export class ChatRoomPage implements OnInit {
     private route: ActivatedRoute,
     private placeService: PlaceService,
     private helper: HelperService,
+    private navCtrl: NavController,
   ) { }
 
-  place = this.placeService.place;
+  place;
   text;
   user;
   people: any[];
   messages;
-
+  hideHeader;
   ngOnInit() {
 
   }
   async ionViewWillEnter() {
-    this.getUser();
-    this.addUserToRoom();
-    await this.getPlace();
-    this.getPeopleInRoom();
-    this.getMessages();
-    
-  }
 
-  async getPlace() {
-    this.route.paramMap.subscribe((paramMap) => {
-      let placeId = paramMap.get('id');
-      firebase.firestore().doc("/places/" + placeId).get().then((placeSnap) => {
-        if (placeSnap.exists) {
-          this.place = { ...placeSnap.data() };
-          placeSnap.ref.update({ userCount  : this.place.userCount })
-        } else {
-          let place: Place = new Place(this.place.name, this.place.id, this.place.userCount)
-          firebase.firestore().doc("/places/" + placeId).set({ ...place })
-        }
-      })
+    this.getPlace().then(() => {
+      this.getPeopleInRoom();
+      this.getMessages();
+      this.scrollBottom();
     })
   }
 
-  addUserToRoom() {
-    let uid = localStorage.getItem('uid');
-    firebase.firestore().doc("users/" + uid).update({ place: this.place.id })
+
+  ionViewDidEnter() {
+    if (!this.place) {
+      this.navCtrl.navigateBack("/home");
+    }
   }
+
+
+  async getPlace() {
+    return new Promise(async (resolve) => {
+      let user: any = await this.getUser();
+      firebase.firestore().doc("/places/" + user.place).get().then((placeSnap) => {
+        this.place = placeSnap.data();
+        console.log(this.place);
+        return resolve();
+      })
+    })
+
+  }
+
 
   removeUserFromRoom() {
     let uid = localStorage.getItem('uid');
@@ -86,7 +88,7 @@ export class ChatRoomPage implements OnInit {
       id: "",
       text: this.text,
       timestamp: new Date().getTime(),
-      user: {...this.user},
+      user: { ...this.user },
     }
     firebase.firestore().collection("/places/" + this.place.id + "/messages").add({ ...message }).then((obj) => {
       obj.update({ id: obj.id })
@@ -94,6 +96,11 @@ export class ChatRoomPage implements OnInit {
     this.text = "";
   }
 
+  scrollBottom() {
+    setTimeout(() => {
+      this.content.scrollToBottom();
+    }, 100);
+  }
   getMessages() {
     firebase.firestore().collection("/places/" + this.place.id + "/messages").orderBy("timestamp").onSnapshot((messageSnap) => {
       let messages = [];
@@ -101,10 +108,22 @@ export class ChatRoomPage implements OnInit {
         messages.push(message.data())
       })
       this.messages = messages;
-      this.content.scrollToTop(100)
+      this.scrollBottom();
     })
   }
 
+
+  getFormatDate(timestamp) {
+    let today = new Date();
+    let messageDate = new Date(timestamp);
+
+    if (today.getDate() == messageDate.getDate() && today.getDay() == messageDate.getDay() && today.getFullYear() == messageDate.getFullYear()) {
+      return 'short'
+    } else {
+      return 'long'
+    }
+
+  }
   getPersonName(uid) {
     let person = this.people.find(user => uid == user.uid)
     if (person) {
@@ -112,18 +131,25 @@ export class ChatRoomPage implements OnInit {
     }
   }
 
-  getUser() {
-    return new Promise((resolve) => {
-      let uid = localStorage.getItem('uid');
-      firebase.firestore().doc("/users/" + uid).get().then((userSnap) => {
-        this.user = userSnap.data();
-        return resolve(userSnap.data())
-      })
-    })
-  }
-
 
   viewProfile(person) {
     this.helper.openModal(ViewProfilePage, { user: person })
+  }
+
+
+  navigateBack() {
+    this.navCtrl.navigateBack("/home")
+  }
+
+
+
+  getUser() {
+    return new Promise(async (resolve) => {
+      let uid = localStorage.getItem('uid');
+      firebase.firestore().doc("/users/" + uid).get().then((userData) => {
+        this.user = userData.data();
+        return resolve(userData.data())
+      })
+    })
   }
 }

@@ -134,7 +134,6 @@ export class PrivateChatPage implements OnInit {
 
   scrollToBottom() {
     this.content.scrollToBottom();
-    console.log("bottom")
 
   }
 }

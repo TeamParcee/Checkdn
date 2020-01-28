@@ -1,0 +1,59 @@
+.chat-container{
+    padding: 16px;
+}
+
+.people-count{
+    position: absolute;
+    right: 54px;
+    bottom: 10px;
+    font-size: 18px;
+}
+
+
+.message-container{
+    background: white;
+    padding: 5px;
+    border-radius: 30px;
+    margin-bottom: 15px
+}
+
+.message {
+    margin-left: 10px;
+}
+
+.message-user-timestamp {
+
+}
+.message-user{
+    font-weight: 600;
+}
+.message-timestamp{
+    font-weight: 300;
+    font-size: 12px;
+}
+.message-text{
+display: flex;
+white-space: pre-line;
+}
+
+.message-user-photo{
+    height: 100% ;
+}
+
+.avatar{
+        vertical-align: middle;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        float: left;
+        margin-right: 10px;
+}
+
+.chat-text-input{
+    border: 2px solid lightgrey;
+    width: 80%;
+    margin-left: auto;
+    border-radius: 20px;
+    padding-left: 10px;
+    margin-top: 5px;
+}

@@ -5,6 +5,8 @@ import 'firebase/auth';
 import { HelperService } from 'src/app/shared/helper.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { NavController } from '@ionic/angular';
+import { CropImagePage } from './crop-image/crop-image.page';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-profile',
@@ -17,11 +19,12 @@ export class ProfilePage implements OnInit {
     private helper: HelperService,
     private authService: AuthService,
     private navCtrl: NavController,
+    private sanitizer: DomSanitizer
   ) { }
 
   user;
   originalUser;
-  
+
 
   ngOnInit() {
   }
@@ -34,37 +37,55 @@ export class ProfilePage implements OnInit {
     })
   }
 
-  saveFname() {
-    firebase.firestore().doc("/users/" + this.user.uid).update({ fname: this.user.fname });
-    this.originalUser.fname = this.user.fname;
-  }
-
-  saveLname() {
-    firebase.firestore().doc("/users/" + this.user.uid).update({ lname: this.user.lname });
-    this.originalUser.lname = this.user.lname;
-  }
-
-  saveEmail() {
-    firebase.firestore().doc("/users/" + this.user.uid).update({ email: this.user.email })
-    firebase.auth().currentUser.updateEmail(this.user.email);
-    this.originalUser.email = this.user.email
-  }
-
-  logout() {
-    this.authService.logout().then(()=>{
-      this.navCtrl.navigateBack("/login")
+  cropImage(input) {
+    let file = input.srcElement.files[0];
+    // this.user.photo =  this.sanitizer.bypassSecurityTrustResourceUrl(this.user.photo);
+    this.helper.openModalPromise(CropImagePage, { dataUrl: file }).then((image) => {
+      if (image == undefined) {
+        image = this.originalUser.photo;
+      }
+      this.user.photo = image;
     })
   }
 
-  delete() {
-    this.helper.confirmationAlert("Delete Account", "Are you sure you want to delete you account?", { denyText: "Cancel", confirmText: "Delete Account" })
-      .then((result) => {
-        if (result) {
-          this.authService.deleteAccount().then(()=>{
-            this.navCtrl.navigateBack("/login");
-          })
-        }
-      })
+
+  sanitizePhoto(photo) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(photo)
+  }
+  cancelPic() {
+    this.user.photo = this.originalUser.photo;
+  }
+
+  savePic() {
+    firebase.firestore().doc("/users/" + this.user.uid).update({ photo: this.user.photo });
+    this.originalUser.photo = this.user.photo;
+  }
+
+  saveFacebook() {
+    firebase.firestore().doc("/users/" + this.user.uid).update({ facebook: this.user.facebook });
+    this.originalUser.facebook = this.user.facebook;
+  }
+
+  saveLinkedin() {
+    firebase.firestore().doc("/users/" + this.user.uid).update({ linkedin: this.user.linkedin });
+    this.originalUser.linkedin = this.user.linkedin;
+
+
+    console.log(this.user.linkedin, this.originalUser.linkedin);
+  }
+
+
+  testFacebook() {
+
+    // ex. link https://www.facebook.com/test
+    let facebook = "fb://facewebmodal/f?href=";
+    let facebookLink = facebook + this.user.facebook;
+    window.open('fb://facewebmodal/f?href=https://www.facebook.com/adiontae.gerron', '_system');
+
+
+  }
+
+  testLinkedin() {
 
   }
 }

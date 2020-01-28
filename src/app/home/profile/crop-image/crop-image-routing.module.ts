@@ -1,16 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { ChatRoomPage } from './chat-room.page';
+import { CropImagePage } from './crop-image.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: ChatRoomPage
-  },
-  {
-    path: 'people',
-    loadChildren: () => import('./people/people.module').then( m => m.PeoplePageModule)
+    component: CropImagePage
   }
 ];
 
@@ -18,4 +14,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class ChatRoomPageRoutingModule {}
+export class CropImagePageRoutingModule {}
