@@ -33,6 +33,7 @@ export class ChatRoomPage implements OnInit {
   async ionViewWillEnter() {
 
     this.getPlace().then(() => {
+      this.checkPlace();
       this.getPeopleInRoom();
       this.getMessages();
       this.scrollBottom();
@@ -40,7 +41,7 @@ export class ChatRoomPage implements OnInit {
   }
 
 
-  ionViewDidEnter() {
+  checkPlace() {
     if (!this.place) {
       this.navCtrl.navigateBack("/home");
     }
@@ -52,7 +53,6 @@ export class ChatRoomPage implements OnInit {
       let user: any = await this.getUser();
       firebase.firestore().doc("/places/" + user.place).get().then((placeSnap) => {
         this.place = placeSnap.data();
-        console.log(this.place);
         return resolve();
       })
     })
