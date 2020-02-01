@@ -25,6 +25,14 @@ export class HelperService {
       loading.present()
     })
   }
+
+  showLoadingMessage(message) {
+    this.loading = this.loadingCtrl.create({
+      message: message
+    }).then((loading) => {
+      loading.present()
+    })
+  }
   hideLoading() {
     this.loadingCtrl.dismiss(this.loading)
   }
@@ -46,7 +54,7 @@ export class HelperService {
       }).then((modal) => {
         modal.present()
         modal.onDidDismiss().then((result) => {
-        return resolve(result.data);
+          return resolve(result.data);
         })
       })
     })
@@ -59,11 +67,11 @@ export class HelperService {
         component: component,
         componentProps: componentProps
       }).then((modal) => {
-        modal.present().then(()=>{
+        modal.present().then(() => {
           modal.id = id
         })
         modal.onDidDismiss().then(() => {
-        return resolve();
+          return resolve();
         })
       })
     })
@@ -72,8 +80,8 @@ export class HelperService {
   closeModal() {
     this.modalCtrl.dismiss()
   }
-  closeModalWithId(id){
-  this.modalCtrl.dismiss(id);    
+  closeModalWithId(id) {
+    this.modalCtrl.dismiss(id);
   }
   okAlert(header: string, message: string) {
     this.alertCtrl.create({
@@ -192,5 +200,5 @@ export class HelperService {
     })
   }
 
-  
+
 }

@@ -31,12 +31,12 @@
 
   <div class="social-media-header">Social Media</div>
   <ion-list *ngIf="user">
-    <ion-item>
-      <ion-label (click)="testFacebook()" class="social-media-label" position="stacked">Facebook </ion-label>
+    <ion-item [href]="user.facebook">
+      <ion-label class="social-media-label" position="stacked">Facebook </ion-label>
       <ion-input readonly [(ngModel)]="user.facebook" placeholder="https://www.facebook.com/john.smith"
         class="social-media-input"> </ion-input>
     </ion-item>
-    <ion-item>
+    <ion-item [href]="user.linkedin">
       <ion-label class="social-media-label" position="stacked">LinkedIn
       </ion-label>
       <ion-input readonly [(ngModel)]="user.linkedin" placeholder="https://www.linkedin.com/in/john" class="social-media-input">

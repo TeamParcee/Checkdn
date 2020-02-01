@@ -23,6 +23,7 @@ export class HomePage implements OnInit {
 
   places: Place[];
   people;
+  loadingMessage = "getting nearby places";
   geocoder = new google.maps.Geocoder();
   coords: {
     lat: number,
@@ -32,60 +33,79 @@ export class HomePage implements OnInit {
   }
 
   ionViewWillEnter() {
+    this.helper.showLoadingMessage(this.loadingMessage);
     let uid = localStorage.getItem('uid');
     firebase.firestore().doc("/users/" + uid).update({ place: "" });
-    this.getUserLocation();
-    setTimeout(() => {
-      if (!this.places || this.places.length == 0) {
-        this.helper.hideLoading();
-        this.helper.okAlert("No Location", "We are not able to find any places near you")
-      }
-    }, 10000);
-
+    this.getUsersLngLat().then(() => {
+      this.getPlaces().then((places: any) => {
+        if (places) {
+          this.places = places;
+          this.helper.hideLoading();
+        } else {
+          this.helper.hideLoading();
+          this.helper.okAlert("No Location", "We are not able to find any places near you")
+        }
+      })
+    }).catch((error) => {
+      this.helper.hideLoading();
+      this.helper.okAlert("No Location", error.message)
+    })
   }
 
   doRefresh(event) {
-    this.getUserLocation();
-    setTimeout(() => {
-      if (!this.places || this.places.length == 0) {
-        this.helper.hideLoading();
-        this.helper.okAlert("No Location", "We are not able to find any places near you")
-      }
-    }, 10000);
-    event.target.complete();
+    // this.getUserLocation();
+    // setTimeout(() => {
+    //   if (!this.places || this.places.length == 0) {
+    //     this.helper.hideLoading();
+    //     this.helper.okAlert("No Location", "We are not able to find any places near you")
+    //   }
+    // }, 10000);
+    // event.target.complete();
   }
 
-  getUserLocation() {
-    let that = this;
-    this.geolocation.getCurrentPosition({ enableHighAccuracy: true }).then((position) => {
-      that.coords = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      }
-      this.getAddress();
+  getUsersLngLat() {
+    return new Promise((resolve, reject) => {
+
+      let that = this;
+      this.geolocation.getCurrentPosition({ enableHighAccuracy: true }).then((position) => {
+        if (position) {
+          that.coords = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          }
+          return resolve()
+        } else {
+          return reject("could not get users position");
+        }
+      })
     })
   }
 
-  getAddress() {
-    let currentLocation = new google.maps.LatLng(this.coords.lat, this.coords.lng);
-    let map = new google.maps.Map(document.getElementById('map'), {
-      center: currentLocation,
-      zoom: 15
-    });
-    let latlng = { lat: this.coords.lat, lng: this.coords.lng };
-    this.geocoder.geocode({ "location": latlng }, (results: any, status) => {
-
-      for (let index = 0; index < 3; index++) {
-        const result = results[index];
-        this.getPlace(result.place_id)
-
-      }
+  getPlaces() {
+    return new Promise((resolve, reject) => {
+      let currentLocation = new google.maps.LatLng(this.coords.lat, this.coords.lng);
+      let map = new google.maps.Map(document.getElementById('map'), {
+        center: currentLocation,
+        zoom: 15
+      });
+      let latlng = { lat: this.coords.lat, lng: this.coords.lng };
+      this.geocoder.geocode({ "location": latlng }, async (results: any, status) => {
+        if (results) {
+          let addresses = [];
+          for (let index = 0; index < 3; index++) {
+            const result = results[index];
+            addresses.push(await this.getPlaceDetails(result.place_id));
+          }
+          return resolve(addresses);
+        } else {
+          return reject("Could convert users location to an address");
+        }
+      })
     })
   }
 
-  getPlace(placeID) {
-    return new Promise((resolve) => {
-      this.places = [];
+  getPlaceDetails(placeID) {
+    return new Promise((resolve, reject) => {
       let currentLocation = new google.maps.LatLng(this.coords.lat, this.coords.lng);
       let map = new google.maps.Map(document.getElementById('map'), {
         center: currentLocation,
@@ -99,13 +119,16 @@ export class HomePage implements OnInit {
 
       let service = new google.maps.places.PlacesService(map);
       service.getDetails(request, async (place, status) => {
-        let p: Place = {
-          id: placeID,
-          name: place.name,
-          userCount: await this.getUserCount(placeID),
+        if (place) {
+          let p: Place = {
+            id: placeID,
+            name: place.name,
+            userCount: await this.getUserCount(placeID),
+          }
+          return resolve(p)
+        } else {
+          return reject("Could not get a places details")
         }
-        console.log(p);
-        this.places.push(p)
       })
 
     })
@@ -129,7 +152,6 @@ export class HomePage implements OnInit {
 
   selectPlace(place) {
     let uid = localStorage.getItem('uid');
-    console.log(place.name, place.id);
     firebase.firestore().doc("/users/" + uid).update({ place: place.id })
     firebase.firestore().doc("/places/" + place.id).get().then((placeSnap) => {
       if (placeSnap.exists) {

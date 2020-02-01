@@ -1,18 +1,3 @@
-<!-- <ion-toolbar color="dark">
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/home"></ion-back-button>
-    </ion-buttons>
-    <ion-title>
-      <h3> {{ place.name }} </h3>
-    </ion-title>
-    <ion-buttons slot="end">
-      <ion-button routerLink="people">
-        {{ people?.length }}
-        <ion-icon name="people" slot="end"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>   -->
-
 
 <ion-header>
   <ion-toolbar></ion-toolbar>
@@ -23,6 +8,7 @@
 
 
     <span class="ion-text-center">
+      <ion-skeleton-text *ngIf="" style="height: 30px" animated style="width: 88%"></ion-skeleton-text>
       <h1 class="header-title">{{ (place?.name.length < 10) ?  place?.name : place?.name.slice(0, 9) + "..."}}</h1>
     </span>
 

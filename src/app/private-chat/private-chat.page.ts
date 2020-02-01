@@ -26,8 +26,9 @@ export class PrivateChatPage implements OnInit {
     await this.getUser();
     await this.getRecipient();
     await this.getMessages().then(() => {
+      this.scrollToBottom();
       setTimeout(() => {
-        this.scrollToBottom()
+        this.disableScroll = false
       }, 100);
     })
 
@@ -60,7 +61,7 @@ export class PrivateChatPage implements OnInit {
       let uid = localStorage.getItem('uid');
       firebase.firestore().collection("/users/" + uid + "/messagesList/" + this.recipient.uid + "/messages")
         .orderBy("timestamp", "desc")
-        .limit(20)
+        .limit(8)
         .onSnapshot((messagesSnap) => {
           let messages = [];
           messagesSnap.forEach((message) => {
@@ -68,12 +69,8 @@ export class PrivateChatPage implements OnInit {
             this.lastMessage = message;
           })
           this.messages = messages.reverse();
-
-          setTimeout(() => {
-            this.disableScroll = false;
-          }, 2000);
+          return resolve()
         })
-      return resolve()
     })
 
   }
@@ -87,8 +84,7 @@ export class PrivateChatPage implements OnInit {
         .startAfter(this.lastMessage)
         .limit(10)
         .onSnapshot((messagesSnap) => {
-          if(messagesSnap.size > 0){
-            this.disableScroll = false;
+          if (messagesSnap.size > 0) {
             messagesSnap.forEach((message) => {
               this.messages.unshift(message.data());
               this.lastMessage = message;
@@ -96,9 +92,8 @@ export class PrivateChatPage implements OnInit {
             })
           } else {
             event.target.complete(0);
-            this.disableScroll = true;
           }
-   
+
         })
     }, 1000);
 
@@ -133,7 +128,9 @@ export class PrivateChatPage implements OnInit {
   }
 
   scrollToBottom() {
+
     this.content.scrollToBottom();
+
 
   }
 }
