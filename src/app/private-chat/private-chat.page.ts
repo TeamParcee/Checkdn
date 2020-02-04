@@ -27,11 +27,7 @@ export class PrivateChatPage implements OnInit {
     await this.getRecipient();
     await this.getMessages().then(() => {
       this.scrollToBottom();
-      setTimeout(() => {
-        this.disableScroll = false
-      }, 100);
     })
-
   }
 
   async getRecipient() {
@@ -61,7 +57,7 @@ export class PrivateChatPage implements OnInit {
       let uid = localStorage.getItem('uid');
       firebase.firestore().collection("/users/" + uid + "/messagesList/" + this.recipient.uid + "/messages")
         .orderBy("timestamp", "desc")
-        .limit(8)
+        .limit(30)
         .onSnapshot((messagesSnap) => {
           let messages = [];
           messagesSnap.forEach((message) => {
@@ -75,29 +71,29 @@ export class PrivateChatPage implements OnInit {
 
   }
 
-  async getMoreMessages(event) {
-    document.getElementById("ion-content").style.height = "50px";
-    setTimeout(() => {
-      let uid = localStorage.getItem('uid');
-      firebase.firestore().collection("/users/" + uid + "/messagesList/" + this.recipient.uid + "/messages")
-        .orderBy("timestamp", "desc")
-        .startAfter(this.lastMessage)
-        .limit(10)
-        .onSnapshot((messagesSnap) => {
-          if (messagesSnap.size > 0) {
-            messagesSnap.forEach((message) => {
-              this.messages.unshift(message.data());
-              this.lastMessage = message;
-              event.target.complete();
-            })
-          } else {
-            event.target.complete(0);
-          }
+  // async getMoreMessages(event) {
+  //   document.getElementById("ion-content").style.height = "50px";
+  //   setTimeout(() => {
+  //     let uid = localStorage.getItem('uid');
+  //     firebase.firestore().collection("/users/" + uid + "/messagesList/" + this.recipient.uid + "/messages")
+  //       .orderBy("timestamp", "desc")
+  //       .startAfter(this.lastMessage)
+  //       .limit(10)
+  //       .onSnapshot((messagesSnap) => {
+  //         if (messagesSnap.size > 0) {
+  //           messagesSnap.forEach((message) => {
+  //             this.messages.unshift(message.data());
+  //             this.lastMessage = message;
+  //             event.target.complete();
+  //           })
+  //         } else {
+  //           event.target.complete(0);
+  //         }
 
-        })
-    }, 1000);
+  //       })
+  //   }, 1000);
 
-  }
+  // }
 
   async sendMessage() {
     let messageReceived = {

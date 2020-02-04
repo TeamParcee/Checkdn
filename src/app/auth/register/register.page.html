@@ -11,8 +11,8 @@
 <ion-content color="dark" class="ion-padding">
 
   <h3 class="create-account-text">Create an Account</h3>
-  <form  class="login-form"  #registerForm="ngForm">
-    <ion-list lines="none" >
+  <form class="login-form" #registerForm="ngForm">
+    <ion-list lines="none">
       <ion-item>
         <ion-label position="stacked" class="auth-label">First Name</ion-label>
         <ion-input #fname="ngModel" name="fname" ngModel minlength="2" required></ion-input>
@@ -43,7 +43,11 @@
         password must be at least 6 charaters long</p>
 
     </ion-list>
-    <ion-button color="light" [disabled]="registerForm.invalid" (click)="register(registerForm)" expand="block">Register</ion-button>
-    <ion-button color="dark"routerLink="/login" routerDirection="back" expand="block">Already have an account</ion-button>
+    <ion-button color="light" [disabled]="registerForm.invalid" (click)="register(registerForm)" expand="block">Register
+    </ion-button>
+    <ion-button color="dark" routerLink="/login" routerDirection="back" expand="block">Already have an account
+    </ion-button>
   </form>
+  <p class="ion-text-center">By creating an account, you agree to our <a target="_blank"
+      href="https://docs.google.com/document/d/1bAgZAsjEDcxjXQUmxns-Q2B5AsopzyDZ6iIEKw43_bQ/edit?usp=sharincg"> End-User License Agreement</a></p>
 </ion-content>

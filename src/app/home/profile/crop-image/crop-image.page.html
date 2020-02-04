@@ -13,7 +13,7 @@
 
   <div class="image-container">
     <div class="image-label"> Image </div>
-    <ion-text *ngIf="failedLoad" (color)="danger">Image failed to loadd</ion-text>
+    <ion-text *ngIf="failedLoad" color="danger">Image failed to load</ion-text>
     <image-cropper [imageFile]="dataUrl" [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
       [aspectRatio]="1 / 1" [resizeToWidth]="150" [resizeToHeight]="150" cropperMinWidth="150" cropperMinHeight="150"
       format="png" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()" (cropperReady)="cropperReady()"

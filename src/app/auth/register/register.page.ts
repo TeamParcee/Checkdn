@@ -12,7 +12,6 @@ import { NavController } from '@ionic/angular';
 export class RegisterPage implements OnInit {
 
   constructor(
-    private formBuilder: FormBuilder,
     private authService: AuthService,
     private firestoreService: FireStoreService,
     private navCtrl: NavController,
@@ -35,8 +34,9 @@ export class RegisterPage implements OnInit {
         localStorage.setItem('uid', user.uid);
         this.firestoreService.setDocument("/users/" + user.uid, {
           fname: form.fname,
-          lanme: form.lname,
+          lname: form.lname,
           email: form.email,
+          photo: '../../../assets/profile.png',
           uid: user.uid
         }).then(() => {
           this.navCtrl.navigateForward("/auth/confirm-email")

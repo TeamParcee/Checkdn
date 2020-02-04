@@ -15,7 +15,7 @@
 <ion-content>
   <div *ngIf="user" class="profile-image-container">
     <span class="image-container">
-      <img class="profile-image" [src]="(user?.photo) ? user?.photo : '../../../assets/profile.png'">
+      <img class="profile-image" [src]="user?.photo">
       <span *ngIf="user.photo == originalUser.photo" class="image-edit-button">
         <label for="picture-input">
           <ion-icon class="image-icon" name="camera"></ion-icon>

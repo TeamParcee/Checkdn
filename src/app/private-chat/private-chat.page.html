@@ -27,13 +27,6 @@
 <ion-content color="light" padding #content id="ion-content">
 
 
-  <ion-infinite-scroll [disabled]="disableScroll" position="top" threshold="0px"
-    (ionInfinite)="getMoreMessages($event)">
-    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Getting Messages...">
-    </ion-infinite-scroll-content>
-  </ion-infinite-scroll>
-
-
   <ion-list class="chat-list" lines="none">
     <div class="chat-item" *ngFor="let message of messages; let i = index">
       <ion-item>
